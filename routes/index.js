@@ -1,59 +1,90 @@
 var conn = require('./../inc/db');
 var express = require('express');
+var menus = require('./../inc/menus');
+var reservations = require('./../inc/reservations');
 var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
 
-  conn.query(`
-    SELECT * FROM tb menus ORDEM BY title
-    
-  `
-  , (err, results)=>{
+    menus.getMenus().then(results =>{
 
-    if (err) {
-      console.log(err);
-    }
+      res.render('index', { 
+        title: 'Restaurante Saboroso!',
+        menus: results,
+        isHome: true
+      });
 
-    res.render('index', { 
-      title: 'Restaurante Saboroso!',
-      menus: results
     });
-    
-
-  });
 
 });
 
 router.get('/contacts', function(req, res, next){
 
-  res.render('contacts');
+  menus.getMenus().then(results => {
 
 
+    res.render('menus',{
+      title: 'Menus - Restaurante Saboroso!',
+      backgroud: 'images/img_bg_3.jpg',
+      h1: 'Diga um oi!',
+      menus: results
+  
+    });
 
-});
 
-router.get('/menus', function(req, res, next){
-
-  res.render('menus');
-
+  });
 
 
 });
 
 router.get('/reservations', function(req, res, next){
 
-  res.render('reservations');
+  reservations.render(req, res);
 
+  res.render('reservations',{
+    title: 'Reservas - Restaurante Saboroso!',
+    backgroud: 'images/img_bg_2.jpg',
+    h1: 'Reserve uma mesa!'
+  });
 
+});
+
+router.post('/reservations', function(req, res, next){
+
+  if (!req, body.name){
+reservations.render(req, res,"Digite o nome" );
+  } else if (!req, body.email){
+    reservations.render(req, res,"Digite o e-mail");
+  }else if (!req, body.people){
+    reservations.render(req, res,"Selecione o numero de pessoas" );
+  }else if (!req, body.date){
+    reservations.render(req, res,"Selecione a data" );
+  }else if (!req, body.time){
+    reservations.render(req, res,"Selecione a hora" );
+  }else{
+
+   reservations.save(req.body).then(results => {
+
+    reservations.render(req, res, null, "reserva realizada com sucesso" );
+
+   }).catch(err=>{
+
+    reservations.render(req, res, err.message);
+
+   });
+
+  }
 
 });
 
 router.get('/services', function(req, res, next){
 
-  res.render('services');
-
-
+  res.render('services',{
+    title: 'Contato - Restaurante Saboroso!',
+    backgroud: 'images/img_bg_1.jpg',
+    h1: 'E um prazer poder servir!'
+  });
 
 });
 
