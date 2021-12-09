@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 
-<%- include("head") -%>
+<%- include('head') -%>
 
 <body>
 
@@ -9,14 +9,13 @@
 
 	<div id="page">
 
-		<%-include("header-menu") -%>
+		<%- include('header-menu') -%>
 
-        <% if (typeof isHome === 'boolen' && isHome) {%>
-        
-        	<%-include("header-index") -%>
-        
-        <% } else {%>
-
-            <%- %-include(header') -%>
-
-        <% } %>
+		<% if(typeof isHome === 'boolean' && isHome) { %>
+		
+			<%- include('header-index') -%>
+		<% } else { %>
+			
+			<%- include('header') -%>
+		
+		<% } %>
